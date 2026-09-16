@@ -1,6 +1,7 @@
 (() => {
   const service = window.HealthSchoolService;
   const result = service.getResult();
+  const GO_HEALTH_HOME = "https://health-portal-demo.vercel.app/";
   const resultContent = document.getElementById("result-content");
   const emptyState = document.getElementById("empty-state");
   const reviewList = document.getElementById("review-list");
@@ -45,7 +46,7 @@
 
   homeBtn?.addEventListener("click", () => {
     service.clearActiveSession();
-    window.location.href = "index.html";
+    window.location.href = GO_HEALTH_HOME;
   });
 
   emptyHomeBtn?.addEventListener("click", () => {
