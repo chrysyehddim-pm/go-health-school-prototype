@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0BB6C4" />
+  <title>GO HEALTH 健康小學堂｜今日回顧</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <main class="app-shell result-page">
+    <header class="brand-header">
+      <div class="brand-wordmark" aria-label="GO HEALTH">GO <span>HEALTH</span></div>
+      <div class="brand-dot" aria-hidden="true"></div>
+    </header>
+
+    <section id="result-content">
+      <div class="result-hero">
+        <div class="result-check">✓</div>
+        <h1>今天的小學堂完成！</h1>
+        <p>一次認識 5 個健康小知識，來快速複習一下吧。</p>
+      </div>
+
+      <h2 class="section-title">今天學到的 5 件事</h2>
+      <div id="review-list" class="review-list"></div>
+
+      <h2 class="section-title">今天的內容主題</h2>
+      <div id="topic-list" class="topic-list"></div>
+
+      <div class="result-actions">
+        <button id="retry-btn" class="btn btn-primary btn-block">再挑戰 5 題</button>
+        <button id="home-btn" class="btn btn-secondary btn-block">返回首頁</button>
+      </div>
+    </section>
+
+    <section id="empty-state" class="empty-state" hidden>
+      <h1>還沒有完成紀錄</h1>
+      <p>先完成 5 題健康小學堂，再回來看看今天學到什麼。</p>
+      <button id="empty-home-btn" class="btn btn-primary btn-block">開始挑戰</button>
+    </section>
+  </main>
+
+  <script src="data/questions.js"></script>
+  <script src="js/quiz-service.js"></script>
+  <script src="js/result.js"></script>
+</body>
+</html>
