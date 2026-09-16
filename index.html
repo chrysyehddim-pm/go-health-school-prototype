@@ -4,31 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0BB6C4" />
-  <title>GO HEALTH 健康小學堂</title>
+  <title>健康小學堂</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <main class="app-shell">
-    <header class="brand-header">
-      <div class="brand-wordmark" aria-label="GO HEALTH">GO <span>HEALTH</span></div>
-      <div class="brand-dot" aria-hidden="true"></div>
-    </header>
-
     <section id="intro-screen" class="screen active" aria-labelledby="intro-title">
-      <div class="hero-card">
-        <div class="eyebrow">GO HEALTH 健康小學堂</div>
-        <h1 id="intro-title">今天一起學 5 個健康小知識</h1>
-        <p>每題都有小提示與解題小卡。答對後就能繼續下一題，輕鬆學、慢慢記。</p>
-        <div class="hero-pills" aria-label="玩法說明">
-          <span>5 題</span><span>4 選 1</span><span>答對再前進</span>
+      <div class="module-title">健康小學堂</div>
+      <div class="hero-card instruction-card">
+        <div class="illustration-badge" aria-hidden="true">💡</div>
+        <h1 id="intro-title">一起把健康小知識，變成生活裡的小提醒</h1>
+        <p class="intro-copy">每次會出現 5 道健康題目，從日常生活出發，邊答題、邊認識實用的健康觀念。</p>
+
+        <div class="instruction-list" aria-label="互動方式">
+          <div class="instruction-item"><span>1</span><div><strong>每次挑戰 5 題</strong><p>每題都是 4 選 1，依直覺選出你認為最適合的答案。</p></div></div>
+          <div class="instruction-item"><span>2</span><div><strong>選錯也別擔心</strong><p>第一次答錯就會出現小提示，陪你一起找到答案。</p></div></div>
+          <div class="instruction-item"><span>3</span><div><strong>答對就多學一點</strong><p>每題答對後都有「健康小提醒」，幫你把重點帶走。</p></div></div>
         </div>
+
         <button id="start-btn" class="btn btn-primary btn-block">開始挑戰</button>
       </div>
     </section>
 
     <section id="quiz-screen" class="screen" aria-live="polite">
       <div class="quiz-topbar">
-        <button id="quit-btn" class="icon-btn" aria-label="回到開始頁">←</button>
+        <button id="quit-btn" class="icon-btn" aria-label="回到說明頁">←</button>
         <div class="progress-wrap">
           <div class="progress-label"><span id="progress-text">1 / 5</span><span id="category-text"></span></div>
           <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
@@ -47,10 +47,10 @@
 
       <section id="answer-card" class="answer-card" hidden>
         <div class="answer-badge">答對了！</div>
-        <h3 id="explanation-title">一起記住這個重點</h3>
+        <h3 id="explanation-title">健康小提醒</h3>
         <p id="explanation-body"></p>
         <div class="takeaway-box">
-          <span>記住這一點</span>
+          <span>重點畫起來</span>
           <strong id="takeaway-text"></strong>
         </div>
         <button id="next-btn" class="btn btn-primary btn-block">下一題</button>
