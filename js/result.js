@@ -40,8 +40,7 @@
 
   retryBtn?.addEventListener("click", () => {
     service.clearActiveSession();
-    service.createSession();
-    window.location.href = "index.html?resume=1";
+    window.location.href = "index.html";
   });
 
   homeBtn?.addEventListener("click", () => {
