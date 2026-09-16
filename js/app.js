@@ -30,8 +30,13 @@
     introScreen.classList.add("active");
   }
 
-  function startNewSession() {
-    session = service.createSession();
+  function beginOrResume() {
+    const existing = service.getSession();
+    if (existing && existing.status === "in_progress" && existing.question_ids?.length === service.SESSION_SIZE) {
+      session = existing;
+    } else {
+      session = service.createSession();
+    }
     showQuiz();
     renderQuestion();
   }
@@ -66,6 +71,11 @@
       btn.addEventListener("click", () => handleAnswer(btn, optionIndex));
       optionsEl.appendChild(btn);
     });
+
+    if (answerState.attempts.some(i => i !== q.correct_index)) {
+      hintText.textContent = q.hint;
+      hintBox.hidden = false;
+    }
   }
 
   function handleAnswer(button, selectedIndex) {
@@ -102,20 +112,17 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  startBtn.addEventListener("click", startNewSession);
+  startBtn.addEventListener("click", beginOrResume);
   nextBtn.addEventListener("click", goNext);
   quitBtn.addEventListener("click", () => {
     if (confirm("要先回到開始頁嗎？這次作答進度會保留在這台裝置。")) showIntro();
   });
 
   const existing = service.getSession();
+  const query = new URLSearchParams(window.location.search);
   if (existing && existing.status === "in_progress" && existing.question_ids?.length === service.SESSION_SIZE) {
     session = existing;
     startBtn.textContent = "繼續上次挑戰";
-    startBtn.addEventListener("click", () => {}, { once: true });
-    startBtn.onclick = () => {
-      showQuiz();
-      renderQuestion();
-    };
+    if (query.get("resume") === "1") beginOrResume();
   }
 })();
