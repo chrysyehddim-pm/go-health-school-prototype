@@ -30,11 +30,18 @@
     introScreen.classList.add("active");
   }
 
+  function sessionIsUsable(candidate) {
+    if (!candidate || candidate.status !== "in_progress" || candidate.question_ids?.length !== service.SESSION_SIZE) return false;
+    const availableIds = new Set((window.HEALTH_SCHOOL_QUESTIONS || []).map(q => q.question_id));
+    return candidate.question_ids.every(id => availableIds.has(id));
+  }
+
   function beginOrResume() {
     const existing = service.getSession();
-    if (existing && existing.status === "in_progress" && existing.question_ids?.length === service.SESSION_SIZE) {
+    if (sessionIsUsable(existing)) {
       session = existing;
     } else {
+      if (existing) service.clearActiveSession();
       session = service.createSession();
     }
     showQuiz();
@@ -45,9 +52,16 @@
     locked = false;
     hintBox.hidden = true;
     answerCard.hidden = true;
-    optionsEl.innerHTML = "";
+    optionsEl.replaceChildren();
 
     const q = service.getCurrentQuestion(session);
+    if (!q) {
+      service.clearActiveSession();
+      showIntro();
+      startBtn.textContent = "重新開始挑戰";
+      return;
+    }
+
     const index = session.current_index;
     questionText.textContent = q.question;
     questionNumber.textContent = `第 ${index + 1} 題`;
@@ -56,12 +70,16 @@
     categoryText.textContent = q.category;
 
     const answerState = session.answers[q.question_id] || { attempts: [] };
+
     q.options.forEach((label, optionIndex) => {
       const btn = document.createElement("button");
       btn.className = "option-btn";
       btn.type = "button";
-      const prefix = String.fromCharCode(65 + optionIndex);
-      btn.innerHTML = `<span class="option-prefix">${prefix}</span>${label}`;
+
+      const prefix = document.createElement("span");
+      prefix.className = "option-prefix";
+      prefix.textContent = String.fromCharCode(65 + optionIndex);
+      btn.append(prefix, document.createTextNode(label));
 
       if (answerState.attempts.includes(optionIndex) && optionIndex !== q.correct_index) {
         btn.classList.add("wrong");
@@ -75,6 +93,19 @@
     if (answerState.attempts.some(i => i !== q.correct_index)) {
       hintText.textContent = q.hint;
       hintBox.hidden = false;
+    }
+
+    if (answerState.completed) {
+      locked = true;
+      const buttons = Array.from(optionsEl.querySelectorAll("button"));
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct_index) btn.classList.add("correct");
+      });
+      explanationBody.textContent = q.explanation;
+      takeawayText.textContent = q.takeaway;
+      nextBtn.textContent = session.current_index === service.SESSION_SIZE - 1 ? "查看今日回顧" : "下一題";
+      answerCard.hidden = false;
     }
   }
 
@@ -115,14 +146,30 @@
   startBtn.addEventListener("click", beginOrResume);
   nextBtn.addEventListener("click", goNext);
   quitBtn.addEventListener("click", () => {
-    if (confirm("要先回到開始頁嗎？這次作答進度會保留在這台裝置。")) showIntro();
+    if (confirm("要先回到說明頁嗎？這次作答進度會保留在這台裝置。")) showIntro();
   });
 
-  const existing = service.getSession();
-  const query = new URLSearchParams(window.location.search);
-  if (existing && existing.status === "in_progress" && existing.question_ids?.length === service.SESSION_SIZE) {
-    session = existing;
-    startBtn.textContent = "繼續上次挑戰";
-    if (query.get("resume") === "1") beginOrResume();
+  async function initialize() {
+    try {
+      await window.HealthSchoolDataReady;
+      const existing = service.getSession();
+      const query = new URLSearchParams(window.location.search);
+
+      startBtn.disabled = false;
+      if (sessionIsUsable(existing)) {
+        session = existing;
+        startBtn.textContent = "繼續上次挑戰";
+        if (query.get("resume") === "1") beginOrResume();
+      } else {
+        if (existing) service.clearActiveSession();
+        startBtn.textContent = "開始挑戰";
+      }
+    } catch (error) {
+      console.error(error);
+      startBtn.disabled = true;
+      startBtn.textContent = "題庫載入失敗，請重新整理";
+    }
   }
+
+  initialize();
 })();
