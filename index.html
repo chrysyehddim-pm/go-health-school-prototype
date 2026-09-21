@@ -22,7 +22,7 @@
           <div class="instruction-item"><span>3</span><div><strong>答對就多學一點</strong><p>每題答對後都有「健康小提醒」，幫你把重點帶走。</p></div></div>
         </div>
 
-        <button id="start-btn" class="btn btn-primary btn-block">開始挑戰</button>
+        <button id="start-btn" class="btn btn-primary btn-block" disabled>題庫載入中…</button>
       </div>
     </section>
 
@@ -58,7 +58,8 @@
     </section>
   </main>
 
-  <script src="data/questions.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="js/question-loader.js"></script>
   <script src="js/quiz-service.js"></script>
   <script src="js/app.js"></script>
 </body>
